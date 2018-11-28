@@ -1,0 +1,29 @@
+body{
+	background-color: #fff;
+}
+li{
+	list-style-type: none;
+}
+.temp{
+	padding-bottom: 5rem;
+}
+.second>.mint-header{
+	background-color: rgb(246,246,246);
+	color: #222;
+}
+.content-image,p>img,.content img{
+	width: 90%;
+}
+.content{
+	text-align: left;
+}
+.content p{
+	text-indent: 2em;
+}
+.second-c{
+	padding: 4.5rem 1.2rem 0;
+
+}
+.mint-searchbar-core{
+	margin-top: 1rem;
+}
