@@ -39,7 +39,24 @@ export default {
 
   data () {
     return {
-
+      baseurl:'http://localhost:3000'
+    }
+  },
+  created(){
+    if (this.$store.state.login) {
+      this.$axios.post(this.baseurl+'/goodstotal',{"user":this.$store.state.user})
+      .then(res=>{
+        console.log(res.data)
+        if(res.data.msg == 'ok'){
+          this.$store.state.carNum = res.data.total;
+          console.log(this.$store.state.carNum)
+        }
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+    }else {
+      this.$store.state.carNum = 0;
     }
   }
 }

@@ -16,7 +16,7 @@ import News from './components/news.vue'
 import Photo from './components/photo.vue'
 import Shoping from './components/shopping.vue'
 
-import prodTools from './crud/crud.js'
+//import prodTools from './crud/crud.js'
 
 export default {
   name: 'App',
@@ -34,7 +34,6 @@ export default {
     }
   },
   created(){
-    this.$store.state.carNum = prodTools.getTotalCount()
   }
 }
 </script>

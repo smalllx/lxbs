@@ -11,12 +11,11 @@
 		                <p class='mui-ellipsis'>
 		                  <span class="comp" @click="subs(index)">-</span>
         							<span class="numb">{{item.num}}</span>
-        							<span class="comp" @click="add(index)">+</span>
+        							<span class="comp" @click="add(index,item.total)">+</span>
         							<span class="price">总价：￥{{item.num*item.price}} </span>
 						        </p>
-						<button class="btn" @click="dlt(index)">删除</button>
+						<button class="btn" @click="dlt(index,item.num)">删除</button>
 		            </div>
-		        <!-- </router-link> -->
 		    </li>
 		</ul>
 		<div class="pay">
@@ -34,7 +33,8 @@ export default {
   data () {
     return {
     	title:'购物车',
-    	carList:[]
+    	carList:[],
+      baseurl:'http://localhost:3000'
     }
   },
   methods:{
@@ -45,45 +45,67 @@ export default {
             duration: 1500  //持续时间（毫秒），若为 -1 则不会自动关闭
       }); 
     },
-  	add(index){
+  	add(index,total){
+          console.log(this.carList[index].num,total)
   		if (this.$store.state.login) {
-	  		if(this.carList[index].num<this.carList[index].total){
-	  			this.carList[index].num++;
-	  			this.$store.state.carNum++;
-	  			prodTools.addOrUpdate({"id":this.carList[index].idnum,"num":1})//操作完更新localstorege
-	  		}
-  		}else {
-  			// console.log('请登录')
-  			this.$toast({  
-  				message: '请登录', //提示内容分
-       			position: 'center', //提示框位置
-       			duration: 1500 , //持续时间（毫秒），若为 -1 则不会自动关闭
-       			iconClass: 'icon icon-home'  //icon 图标的类名
-			});    
-  		}
+	  		if(this.carList[index].num<total){
+          console.log(123123123)
+	  			this.$axios.post(this.baseurl+'/addgoods',{user:this.$store.state.user,goodsid:this.carList[index].goodsid,num:1})  
+          .then(res=>{
+            console.log(res.data)
+            if(res.data.msg == "ok"){
+              this.carList[index].num++;
+              this.$store.state.carNum++;
+              console.log('success')
+            }
+          })
+          .catch(err=>{
+            console.log(err)
+          })
+        }
+      }else {
+        this.warnMessage()
+      }
   	},
   	subs(index){
   		if (this.$store.state.login) {
 	  		if(this.carList[index].num>1){
-	  			this.carList[index].num--;
-	  			this.$store.state.carNum--;
-	  			prodTools.addOrUpdate({"id":this.carList[index].idnum,"num":-1})//操作完更新localstorege
+          this.$axios.post(this.baseurl+'/addgoods',{user:this.$store.state.user,goodsid:this.carList[index].goodsid,num:-1})  
+          .then(res=>{
+            console.log(res.data)
+            if(res.data.msg == "ok"){
+              this.carList[index].num--;
+              this.$store.state.carNum--;
+              console.log('success')
+            }
+          })
+          .catch(err=>{
+            console.log(err)
+          })
 	  		}
   		}else {
   			this.warnMessage()
   		}
   	},
-  	dlt(i){
+  	dlt(i,num){
       if (this.$store.state.login) {
-    		let goods = this.carList[i]
-    		prodTools.delete(goods.idnum)
-    		this.$store.state.carNum -= goods.num
-    		this.carList.splice(i,1)
-    		this.$toast({  
-    				message: '删除成功！', //提示内容分
-         			position: 'center', //提示框位置
-         			duration: 1500  //持续时间（毫秒），若为 -1 则不会自动关闭
-  			}); 
+        console.log(this.$store.state.user,this.carList[i].goodsid)
+        this.$axios.post(this.baseurl+'/deletegoods',{user:this.$store.state.user,goodsid:this.carList[i].goodsid})  
+          .then(res=>{
+            console.log(res.data)
+            if(res.data.msg == "ok"){
+              this.$store.state.carNum -= num
+              this.carList.splice(i,1)
+              this.$toast({  
+                  message: '删除成功！', //提示内容分
+                    position: 'center', //提示框位置
+                    duration: 1500  //持续时间（毫秒），若为 -1 则不会自动关闭
+              }); 
+            }
+          })
+          .catch(err=>{
+            console.log(err)
+          })
     	}
       else {
         this.warnMessage()
@@ -91,26 +113,44 @@ export default {
     }
   },
   created(){
-  		let prods = JSON.parse(localStorage.getItem('prods')||'{}')
-  		//console.log(Object.keys(obj))
-  		let arr = Object.keys(prods)
-  		for (var i = arr.length - 1; i >= 0; i--) {
-  			// this.goodsNum.push(obj[arr[i]])  单独存一个购物数量的数组，不好使，用set添加属性函数
-  			this.$axios.get('myapi/'+arr[i])	
-  			.then(res=>{
-  				var data = res.data;
-  				//下面是用 添加属性 的方法，不能操作他的值 要用set
-  				// data.num = prods[data.idnum]
-  				// data.isPicked = true
-  				this.$set(data,'num',prods[data.idnum])
-  				//console.log(this.data)
-  				this.$set(data,'isPicked',true)
-  				this.carList.push(data)
-  			})
-  			.catch(err=>{
-  				console.log(err)
-  			})
-  		}
+    if(this.$store.state.login){
+      this.$axios.post(this.baseurl+'/goodscar',{user:this.$store.state.user})  
+        .then(res=>{
+          console.log(res.data)
+          if(res.data.msg == "ok"){
+            var goodsList = res.data.goods;
+            var goodsnum = res.data.goodsnum;
+            goodsList.forEach((item,index) => {
+              this.$set(item,'isPicked',true)
+              this.$set(item,'num',goodsnum[index])
+            })
+          }
+          this.carList = goodsList;
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+    }
+  		// let prods = JSON.parse(localStorage.getItem('prods')||'{}')
+  		// //console.log(Object.keys(obj))
+  		// let arr = Object.keys(prods)
+  		// for (var i = arr.length - 1; i >= 0; i--) {
+  		// 	// this.goodsNum.push(obj[arr[i]])  单独存一个购物数量的数组，不好使，用set添加属性函数
+  		// 	this.$axios.get('myapi/'+arr[i])	
+  		// 	.then(res=>{
+  		// 		var data = res.data;
+  		// 		//下面是用 添加属性 的方法，不能操作他的值 要用set
+  		// 		// data.num = prods[data.idnum]
+  		// 		// data.isPicked = true
+  		// 		this.$set(data,'num',prods[data.idnum])
+  		// 		//console.log(this.data)
+  		// 		this.$set(data,'isPicked',true)
+  		// 		this.carList.push(data)
+  		// 	})
+  		// 	.catch(err=>{
+  		// 		console.log(err)
+  		// 	})
+  		// }
   },
   computed:{
   	pay(){

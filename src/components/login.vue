@@ -17,7 +17,8 @@ export default {
     return {
     	user:'',
     	pwd:'',
-    	sql:[]
+    	sql:[],
+      baseurl:'http://localhost:3000'
     }
   },
   methods:{
@@ -30,35 +31,42 @@ export default {
     },
   	login(){
       //console.log(this.sql)
-  		for (var i = this.sql.length - 1; i >= 0; i--) {
-  			if (this.sql[i].name==this.user && this.sql[i].pwd == this.pwd) {
-  				this.$store.state.login = true
-  				this.$store.state.user = this.user
+      this.$axios.post(this.baseurl+'/user',{"user":this.user,"pwd":this.pwd})
+      .then(res=>{
+        console.log(res.data)
+
+        //this.sql = res.data
+        if(res.data.msg == "ok"){
+          this.$store.state.login = true
+          this.$store.state.user = this.user
           //console.log(this.$store.state.user)
           this.msg('登录成功！ ' + this.$store.state.user + '已登录')
-  				this.$router.push({name:'home'})
-  				return
-  			}
-      }
-  				//console.log('账号或密码错误')
+          this.$router.push({name:'home'})
+         return
+        }else{
           this.msg('账号或密码错误') 
-  				this.user = ''
-  				this.pwd = ''
-  				return 		
+          this.user = ''
+          this.pwd = ''
+          return  
+        }
+      })
+      .catch(err=>{
+        console.log(err)
+      })
   	},
   	forget(){
   		this.$router.push({name:'reg'})
   	}
   },
   created(){
-  	this.$axios.get('myapi/user')
-  	.then(res=>{
-  		this.sql = res.data
-      console.log(sql)
-  	})
-  	.catch(err=>{
-  		console.log(err)
-  	})
+  	// this.$axios.get('myapi/user')
+  	// .then(res=>{
+  	// 	this.sql = res.data
+   //    console.log(sql)
+  	// })
+  	// .catch(err=>{
+  	// 	console.log(err)
+  	// })
   }
 }
 </script>

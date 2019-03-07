@@ -73,11 +73,11 @@ html{
 }
 .intro{
 	position: fixed;
-	padding-top: 50px;
+	margin-top: 40px;
 	color: rgb(92,156,190);
-	width: 100%;
-	height: 85px;
-	line-height: 30px;
+	/*width: 100%;*/
+	/*height: 85px;*/
+	line-height: 40px;
 	white-space: nowrap;
 	overflow-x: auto;
 	overflow-y: hidden;

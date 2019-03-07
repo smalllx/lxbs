@@ -1,10 +1,10 @@
 <template>
 	<div class="wrap"> 
-    <input type="text" v-model="value" placeholder="搜索" @keydown.enter="search()">
+    <input type="text" v-model="value" placeholder="搜索">
     <button @click="btnsearch()">search</button>
     <ul>
-      <li v-for="(item,index) in temp" :key="index" @click="select(item.introduct)">
-        <router-link :key="item.id" :to="{name:'goodsDetail',params:{id:item.id}}" tag="div">
+      <li v-for="(item,index) in temp" :key="index">
+        <router-link :key="item.goodsid" :to="{name:'goodsDetail',params:{goodsid:item.goodsid}}" tag="div">
           {{item.introduct}}
         </router-link>
       </li>
@@ -21,38 +21,27 @@ export default {
     return {
     	value:'',
       list:[],
-      temp:[]
+      temp:[],
+      baseurl:'http://localhost:3000'
     }
   },
-  created(){
-    this.$axios.get('/myapi/goodslist')
-    .then(res=>{
-      //console.log(res.data)
-      this.list = res.data;
-      // this.list = Array.from(this.list)
-      console.log(this.list)
-    })
-    .catch(err=>{
-      console.log(err)
-    })
-  },
   methods:{
-    search(){
-      this.temp = [];
-      this.list.forEach(item => {
-        if(item.introduct.indexOf(this.value)!==-1){
-          this.temp.push(item)
-        }
-      })
-      // console.log(this.list)
-      
-    },
-    select(item){
-      this.value = item;
-    },
     btnsearch(){
-      this.$store.state.goods = this.temp;
-      this.$router.push({name:"shopping"})
+      this.$axios.post(this.baseurl+'/searchgoods',{key:this.value})
+      .then(res=>{
+        console.log(res.data)
+        if(res.data.msg == "ok"){
+           this.temp = res.data.goodslist;
+        }
+        //this.list = res.data;
+        // this.list = Array.from(this.list)
+        console.log(this.list)
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+      //this.$store.state.goods = this.temp;
+      //this.$router.push({name:"shopping"})
     }
 
   }

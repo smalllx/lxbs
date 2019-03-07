@@ -18,7 +18,7 @@ export default {
     	user:'',
     	pwd:'',
     	repwd:'',
-    	sql:[]
+      baseurl:'http://localhost:3000'
     }
   },
   methods:{
@@ -30,28 +30,29 @@ export default {
 		})
   	},
   	reg(){
-  		for (var i = this.sql.length - 1; i >= 0; i--){
-	  		if (this.sql[i].name!==this.user) {
-		  		
-	  		}
-	  		else{
-	  			this.msg('用户已存在！')   
-	  			this.user = ''
-	  			this.pwd = ''
-	  			this.repwd = ''			
-	  			return
-	  		}
-
-  		}		
   		if(this.user.trim()!=='' && this.pwd.trim()!=='' && this.pwd==this.repwd){
-	  			this.msg('注册成功！')
-	  			this.$axios.post('myapi/user',{"name":this.user,"pwd":this.pwd})
-	  			this.$router.push({name:'login'})
-	  		}else {
-	  			this.msg('注册失败！')
-	  		}
+          this.$axios.post(this.baseurl+'/reguser',{user:this.user,pwd:this.pwd})
+          .then(res=>{
+            if(res.data.msg == "ok"){
+              this.msg('注册成功！')
+              this.$router.push({name:'login'})
+            }else if(res.data.msg == "fail"){
+              this.msg('用户名已存在！')
+              this.user = ''
+              this.pwd = ''
+              this.repwd = ''
+            }else{
+              this.msg('注册失败！')
+            }
+          })
+          .catch(err=>{
+            console.log(err)
+          })
+	  		}else{
+          this.msg("用户名不能为空或两次密码不一致！")
+        }
   }
-  },
+},
   created(){
   	this.$axios.get('myapi/user')
   	.then(res=>{

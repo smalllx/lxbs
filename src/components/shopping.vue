@@ -3,7 +3,7 @@
 		<Second :title='title'>{{title}}</Second>
 		<div class="list">
 			<div class="goods" v-for="item in list">
-				<router-link class="img" :key="item.id" :to="{name:'goodsDetail',params:{id:item.id}}" tag="div">
+				<router-link class="img" :key="item.goodsid" :to="{name:'goodsDetail',params:{goodsid:item.goodsid}}" tag="div">
 					<img :src="item.url">				
 					<p class="desc">{{item.introduct}}</p>
 					<p class="price">￥{{item.price}}</p>
@@ -14,6 +14,7 @@
 </template>
 
 <script>
+
 export default {
 
   name: 'shopping',
@@ -21,22 +22,24 @@ export default {
     return {
     	title:"Lx商城",
     	list:{},
+    	baseurl:'http://localhost:3000'
     }
   },
   created(){
-  	if(this.$store.state.goods.length !== 0){
-  		this.list = this.$store.state.goods
-  	}else{
-  		this.$axios.get('/myapi/goodslist')
+  	// if(this.$store.state.goods.length !== 0){
+  	// 	this.list = this.$store.state.goods
+  	// 	console.log(this.list)
+  	// }else{
+  		this.$axios.get(this.baseurl+'/')// 访问json文件的接口'myapi/goodslist'
 		  	.then(res=>{
-		  		//console.log(res.data)
+		  		console.log(res.data)
 		  		this.list = res.data
 		  	})
 		  	.catch(err=>{
 		  		console.log(err)
 		  	})
 	  	}
-  }
+  //}
 }
 </script>
 

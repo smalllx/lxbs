@@ -6,8 +6,8 @@
 			<img :src="imgd.url" class="ad">
 			<p class="intro">{{imgd.introduct}}</p>
 			<p style="height: 20px">
-				<span style="float: left;">销量：1000</span>
-				<span style="float: right;">产地：福建 莆田</span>
+				<span style="float: left;">销量：{{imgd.sale}}</span>
+				<span style="float: right;">产地：{{imgd.borned}}</span>
 			</p>
 			<p class="price p">单价：￥{{imgd.price}}</p>
 			<p class="p">购买数量：<span class="comp" @click="subs">-</span>
@@ -19,7 +19,7 @@
 			<mt-button  class="btn buy">购买</mt-button>
 			<div class="pro">
 				<p>商品信息</p>
-				<p class="info">商品编号：{{imgd.idnum}}</p>
+				<p class="info">商品编号：{{imgd.goodsid}}</p>
 				<p class="info">商品库存：{{imgd.total}}</p>
 				<p class="info">上架日期：{{imgd.addTime}}</p>
 			</div>
@@ -33,7 +33,7 @@
 					<li v-for="comment in imgd.comments"  class="comment">
 						<span class="user">{{comment.user}}: </span>
 						<span>{{comment.say}}</span><br>
-						<span class="date">{{comment.date}}</span>
+						<span class="date">{{comment.sayTime}}</span>
 						<hr>
 					</li>
 				</ul>
@@ -57,18 +57,43 @@ export default {
     	pid:'',
     	num:1,
     	istrue:0,
-    	totalPrice:''
+    	totalPrice:'',
+    	total:0,
+    	baseurl:'http://localhost:3000'
     }
   },
   methods:{
   	submited(){
-  		let date = new Date().toLocaleDateString()
-  	//	console.log(this.imgd.comments.length)
-  		if (this.msg.trim()!=='') {
-  			this.$axios.post('/myapi/detailll/',{"user":"匿名用户","say":this.msg,"date":date})
-  			this.imgd.comments.unshift({"id":2,"user":"匿名用户","say":this.msg,"date":date})
-  			this.len++
-  			this.msg=''
+  		if(this.$store.state.login){
+  			let date = new Date().toLocaleDateString()
+	  	//	console.log(this.imgd.comments.length)
+	  		if (this.msg.trim()!=='') {
+	  			this.$axios.post(this.baseurl+'/goodscom',{"user":this.$store.state.user,"say":this.msg,"date":date,"goods":this.imgd.goodsid})
+	  			.then(res=>{
+			  		console.log(res.data)
+			  		if(res.data.msg == 'ok'){
+			  			this.imgd.comments.unshift({"user":this.$store.state.user,"say":this.msg,"sayTime":date})
+	  					this.len++;
+	  					this.msg='';
+			  		}else{
+			  			this.$toast({  
+			  				message: '评论失败', //提示内容分
+			       			position: 'center', //提示框位置
+			       			duration: 1500  //持续时间（毫秒），若为 -1 则不会自动关闭
+						}); 
+			  		}
+			  		
+			  	})
+			  	.catch(err=>{
+			  		console.log(err)
+			  	})
+  			}
+  		}else{
+  			this.$toast({  
+  				message: '请先登录~', //提示内容分
+       			position: 'center', //提示框位置
+       			duration: 1500  //持续时间（毫秒），若为 -1 则不会自动关闭
+			}); 
   		}
   	},
   	add(){
@@ -83,24 +108,35 @@ export default {
   		}
   		
   	},
+  	//加入购物车
   	addcar(){	
   		//this.$emit('addc',this.num)
   		//this.$store.state.carNum += this.num
   		//test
   		if (this.$store.state.login) {
-	  		prodTools.addOrUpdate({
-	  			id:this.imgd.idnum,
-	  			num:this.num
-	  		}) 		
-	  		this.$toast({  
-				message: '添加成功！', //提示内容
-	   			position: 'center', //提示框位置
-	   			duration: 1500  //持续时间（毫秒），若为 -1 则不会自动关闭
-			})
-	  		this.$store.state.carNum = prodTools.getTotalCount();
-  		}
-  	//	console.log(prodTools.getProds())
-  		else {
+  			this.$axios.post(this.baseurl+'/addgoods',{"user":this.$store.state.user,"goodsid":this.imgd.goodsid,"num":this.num})
+  			.then(res=>{
+		  		console.log(res.data)
+		  		if(res.data.msg == 'ok'){
+		  			this.$toast({  
+						message: '添加成功！', //提示内容
+			   			position: 'center', //提示框位置
+			   			duration: 1500  //持续时间（毫秒），若为 -1 则不会自动关闭
+					})
+			  		this.$store.state.carNum += this.num;
+		  		}else{
+		  			this.$toast({  
+		  				message: '添加失败！', //提示内容分
+		       			position: 'center', //提示框位置
+		       			duration: 1500  //持续时间（毫秒），若为 -1 则不会自动关闭
+					}); 
+		  		}
+		  		
+		  	})
+		  	.catch(err=>{
+		  		console.log(err)
+		  	})
+  		}else {
   			this.$toast({  
   				message: '请登录', //提示内容分
        			position: 'center', //提示框位置
@@ -110,17 +146,18 @@ export default {
   	}
   },
   computed:{
-
   	// len(){
   	// 	return this.imgd.comments.length
   	// }
   },
   created(){
 
-  	this.pid = this.$route.params.id
-  	this.$axios.get('myapi/'+this.pid)
+  	this.pid = this.$route.params.goodsid;
+  	console.log(this.pid)
+  	//获取商品详情
+  	this.$axios.post(this.baseurl+'/goodsdetail',{goodsid:this.pid})
   	.then(res=>{
-  		//console.log(res.data)
+  		console.log(res.data)
   		this.imgd = res.data
   		//console.log(this.imgd)
   		this.len = this.imgd.comments.length
@@ -128,7 +165,16 @@ export default {
   	.catch(err=>{
   		console.log(err)
   	})
-  	 this.$store.state.carNum = prodTools.getTotalCount();
+  	//获取购物车商品总数
+  	this.$axios.post(this.baseurl+'/goodstotal',{user:this.$store.state.user})
+  	.then(res=>{
+  		console.log(res.data)
+  		this.$store.state.carNum = res.data.total
+  	})
+  	.catch(err=>{
+  		console.log(err)
+  	})
+  	//this.$store.state.carNum = prodTools.getTotalCount();
   }
 }
 </script>

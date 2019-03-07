@@ -81,7 +81,7 @@ export default new Router({
     },
     {
       name:'goodsDetail',
-      path:'/goodsDetail/:id',
+      path:'/goodsDetail/:goodsid',
       component:shoppingDetail
     },
     {

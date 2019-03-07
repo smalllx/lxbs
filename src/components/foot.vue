@@ -22,7 +22,6 @@
 </template>
 
 <script>
-  import prodTools from '../crud/crud.js'
 export default {
 
   name: 'foot',
