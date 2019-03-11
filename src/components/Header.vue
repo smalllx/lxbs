@@ -1,6 +1,6 @@
 <template>
 <div class="head">
-     <mt-header title="固定在顶部"></mt-header>
+     <mt-header title="PTshop"></mt-header>
 <mt-swipe :show-indicators="false" :auto="1000" style="width: 100%;height: 180px;">
   <mt-swipe-item><img src="../assets/logo.png"></mt-swipe-item>
   <mt-swipe-item><img src="../assets/logo.png"></mt-swipe-item>

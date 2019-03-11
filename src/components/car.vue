@@ -4,17 +4,18 @@
   		<ul class="mui-table-view second-c">
 		    <li class="mui-table-view-cell " v-for="(item,index) in carList" :key="index">
 		        <!-- <router-link :to="{name:'shoppingDetail',query:{id:item.id}}" > -->
+            
 		        	<mt-switch v-model="item.isPicked" class="switch"></mt-switch>
-		             <img class="mui-media-object mui-pull-left goods" :src="item.url">
+		             <img class="mui-media-object mui-pull-left goods" :src="item.url" onerror="this.src='../static/img/ptshop_default.jpg'">
 		            <div class="mui-media-body">
 		                <p class="desc">{{item.introduct}}</p> 
 		                <p class='mui-ellipsis'>
 		                  <span class="comp" @click="subs(index)">-</span>
         							<span class="numb">{{item.num}}</span>
-        							<span class="comp" @click="add(index,item.total)">+</span>
+        							<span class="comp" @click="add(index)">+</span>
         							<span class="price">总价：￥{{item.num*item.price}} </span>
 						        </p>
-						<button class="btn" @click="dlt(index,item.num)">删除</button>
+						        <button class="btn" @click="dlt(index,item.num)">删除</button>
 		            </div>
 		    </li>
 		</ul>
@@ -49,7 +50,6 @@ export default {
           console.log(this.carList[index].num,total)
   		if (this.$store.state.login) {
 	  		if(this.carList[index].num<total){
-          console.log(123123123)
 	  			this.$axios.post(this.baseurl+'/addgoods',{user:this.$store.state.user,goodsid:this.carList[index].goodsid,num:1})  
           .then(res=>{
             console.log(res.data)
@@ -170,6 +170,7 @@ export default {
 <style lang="css" scoped>
 .desc{
 	overflow: hidden;
+  text-align: left;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	font-size: 16px;

@@ -42,12 +42,10 @@ export default {
           //console.log(this.$store.state.user)
           this.msg('登录成功！ ' + this.$store.state.user + '已登录')
           this.$router.push({name:'home'})
-         return
         }else{
-          this.msg('账号或密码错误') 
-          this.user = ''
-          this.pwd = ''
-          return  
+          this.msg('账号或密码错误');
+          this.user = '';
+          this.pwd = '';
         }
       })
       .catch(err=>{

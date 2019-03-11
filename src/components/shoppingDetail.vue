@@ -3,7 +3,7 @@
 	<div>
 		<second :title="title">{{title}}</second>
 		<div class="detail">
-			<img :src="imgd.url" class="ad">
+			<img :src="imgd.url" class="ad" onerror="this.src='../static/img/ptshop_default.jpg'">
 			<p class="intro">{{imgd.introduct}}</p>
 			<p style="height: 20px">
 				<span style="float: left;">销量：{{imgd.sale}}</span>
@@ -166,14 +166,19 @@ export default {
   		console.log(err)
   	})
   	//获取购物车商品总数
-  	this.$axios.post(this.baseurl+'/goodstotal',{user:this.$store.state.user})
-  	.then(res=>{
-  		console.log(res.data)
-  		this.$store.state.carNum = res.data.total
-  	})
-  	.catch(err=>{
-  		console.log(err)
-  	})
+  	if(this.$store.state.login){
+	  	this.$axios.post(this.baseurl+'/goodstotal',{user:this.$store.state.user})
+	  	.then(res=>{
+	  		console.log(res.data)
+	  		this.$store.state.carNum = res.data.total
+	  	})
+	  	.catch(err=>{
+	  		console.log(err)
+	  	})
+  	}else{
+  		this.$store.state.carNum = 0;
+  	}
+  	
   	//this.$store.state.carNum = prodTools.getTotalCount();
   }
 }

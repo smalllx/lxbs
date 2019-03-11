@@ -4,7 +4,7 @@
 		<div class="list">
 			<div class="goods" v-for="item in list">
 				<router-link class="img" :key="item.goodsid" :to="{name:'goodsDetail',params:{goodsid:item.goodsid}}" tag="div">
-					<img :src="item.url">				
+					<img :src="item.url" onerror="this.src='../static/img/ptshop_default.jpg'">	
 					<p class="desc">{{item.introduct}}</p>
 					<p class="price">￥{{item.price}}</p>
 				</router-link>
