@@ -12,7 +12,7 @@
 		                <p class='mui-ellipsis'>
 		                  <span class="comp" @click="subs(index)">-</span>
         							<span class="numb">{{item.num}}</span>
-        							<span class="comp" @click="add(index)">+</span>
+        							<span class="comp" @click="add(index,item.total)">+</span>
         							<span class="price">总价：￥{{item.num*item.price}} </span>
 						        </p>
 						        <button class="btn" @click="dlt(index,item.num)">删除</button>
@@ -62,6 +62,12 @@ export default {
           .catch(err=>{
             console.log(err)
           })
+        }else{
+          this.$toast({  
+            message: '库存不足', //提示内容分
+            position: 'center', //提示框位置
+            duration: 1500  //持续时间（毫秒），若为 -1 则不会自动关闭
+          }); 
         }
       }else {
         this.warnMessage()

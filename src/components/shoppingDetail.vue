@@ -21,7 +21,7 @@
 				<p>商品信息</p>
 				<p class="info">商品编号：{{imgd.goodsid}}</p>
 				<p class="info">商品库存：{{imgd.total}}</p>
-				<p class="info">上架日期：{{imgd.addTime}}</p>
+				<p class="info">上市日期：{{imgd.addTime}}</p>
 			</div>
 			<div>
 				<p class="fabiao">发表评论：</p>
@@ -99,7 +99,13 @@ export default {
   	add(){
   		if(this.num<this.imgd.total){
   			this.num++;
-  		}
+  		}else{
+          this.$toast({  
+            message: '库存不足', //提示内容分
+            position: 'center', //提示框位置
+            duration: 1500  //持续时间（毫秒），若为 -1 则不会自动关闭
+          }); 
+        }
   		
   	},
   	subs(){
