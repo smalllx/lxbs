@@ -20,7 +20,7 @@
 		    </li>
 		</ul>
 		<div class="pay">
-			<p class="total">已选中<span class="red">{{pay.num}}</span>  件商品,共计 <span class="red">￥{{pay.sum}}</span> 元</p><button class="btn">去结算</button>			
+			<p class="total">已选中<span class="red">{{pay.num}}</span>  件商品,共计 <span class="red">￥{{pay.sum}}</span> 元</p><button class="btn" @click="buy()">去结算</button>			
 		</div>
 	</div>
 </template>
@@ -116,6 +116,33 @@ export default {
       else {
         this.warnMessage()
       }
+    },
+    buy(){
+      var buygoods = [];
+      var buynum = [];
+      this.carList.forEach((item,index) =>{
+        if (item.isPicked) {
+          buygoods.push(item.goodsid)
+          buynum.push(item.num)
+          this.$store.state.carNum -= item.num;
+          this.carList.splice(index,1)
+        }
+      })
+      console.log(buygoods)
+      this.$axios.post(this.baseurl+'/buygoods',{user:this.$store.state.user,buy:buygoods,nums:buynum})  
+        .then(res=>{
+          console.log(res.data)
+          if(res.data.msg == "ok"){
+            this.$toast({  
+                message: '购买成功，你的包裹正向您飞来~', //提示内容分
+                  position: 'center', //提示框位置
+                  duration: 2000  //持续时间（毫秒），若为 -1 则不会自动关闭
+            }); 
+          }
+        })
+        .catch(err=>{
+          console.log(err)
+        })
     }
   },
   created(){
@@ -137,26 +164,6 @@ export default {
           console.log(err)
         })
     }
-  		// let prods = JSON.parse(localStorage.getItem('prods')||'{}')
-  		// //console.log(Object.keys(obj))
-  		// let arr = Object.keys(prods)
-  		// for (var i = arr.length - 1; i >= 0; i--) {
-  		// 	// this.goodsNum.push(obj[arr[i]])  单独存一个购物数量的数组，不好使，用set添加属性函数
-  		// 	this.$axios.get('myapi/'+arr[i])	
-  		// 	.then(res=>{
-  		// 		var data = res.data;
-  		// 		//下面是用 添加属性 的方法，不能操作他的值 要用set
-  		// 		// data.num = prods[data.idnum]
-  		// 		// data.isPicked = true
-  		// 		this.$set(data,'num',prods[data.idnum])
-  		// 		//console.log(this.data)
-  		// 		this.$set(data,'isPicked',true)
-  		// 		this.carList.push(data)
-  		// 	})
-  		// 	.catch(err=>{
-  		// 		console.log(err)
-  		// 	})
-  		// }
   },
   computed:{
   	pay(){

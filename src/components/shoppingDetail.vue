@@ -16,7 +16,7 @@
 			<p class="p">商品属性：<span class="attr" v-for="(item,index) in imgd.attr" @click="istrue=index" :class="{active:istrue==index}">{{item}}</span></p>
 			<p class="price p">商品总价：￥{{num*imgd.price}}</p>
 			<mt-button class="btn" @click="addcar">加入购物车</mt-button>&emsp;
-			<mt-button  class="btn buy">购买</mt-button>
+			<mt-button  class="btn buy" @click="buy">购买</mt-button>
 			<div class="pro">
 				<p>商品信息</p>
 				<p class="info">商品编号：{{imgd.goodsid}}</p>
@@ -149,7 +149,25 @@ export default {
        			duration: 1500  //持续时间（毫秒），若为 -1 则不会自动关闭
 			}); 
   		}
-  	}
+  	},
+  	buy(){
+      var buygoods = [this.imgd.goodsid];
+      var buynum = [this.num];
+      this.$axios.post(this.baseurl+'/buygoods',{user:this.$store.state.user,buy:buygoods,nums:buynum})  
+        .then(res=>{
+          console.log(res.data)
+          if(res.data.msg == "ok"){
+            this.$toast({  
+                message: '购买成功，你的包裹正向您飞来~', //提示内容分
+                  position: 'center', //提示框位置
+                  duration: 2000  //持续时间（毫秒），若为 -1 则不会自动关闭
+            }); 
+          }
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+    }
   },
   computed:{
   	// len(){

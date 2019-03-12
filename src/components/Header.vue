@@ -77,19 +77,19 @@ export default {
     color: rgb(255,255,255);
   }
   .icon-xinwen{
-    background-color: pink;
-    color: #36e;
+    background-color: #8161dd;
+    color: #fff;
   }
   .icon-zufang{
-    background-color: yellow;
-    color: red;
+    background-color: pink;
+    color: #d90f54;
   }
   .mui-icon-home{
     background-color: skyblue;
-    color: purple
+    color: #fff;
   }
   .mui-icon-location{
-    background-color: yellowgreen
+    background-color: yellowgreen;
   }
   .mui-icon-search{
     background-color: orange

@@ -1,10 +1,14 @@
 <template>
 	<div>
-		<label>用户名：</label><input type="text" name="" v-model="user">
-		<label>密码：</label><input type="password" name="" v-model="pwd">
-		确认密码：<input type="password" name="" v-model="repwd">
-		<mt-button @click=$router.go(-1)>返回</mt-button>
-		<mt-button @click="reg">注册</mt-button>
+    <Second :title='title'>{{title}}</Second>
+    <div class="con">
+      <img src="../../static/img/logo.png" alt="" width="50%">
+      <label>用户名：</label><input type="text" name="" v-model="user">
+      <label>密&emsp;码：</label><input type="password" name="" v-model="pwd">
+      <label>确认密码：</label><input type="password" name="" v-model="repwd">
+     <!--  <button class="mui-btn mui-btn-primary" @click=$router.go(-1)>返回</button> -->
+      <button class="log-btn" @click="reg">注&emsp;&emsp;册</button>
+    </div>
 	</div>
 </template>
 
@@ -15,6 +19,7 @@ export default {
 
   data () {
     return {
+      title:'用户注册',
     	user:'',
     	pwd:'',
     	repwd:'',
@@ -66,4 +71,35 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.con{
+  padding-top: 80px;
+  background: linear-gradient(#999, #000); /* 标准的语法 */
+  opacity: 0.8;
+  height: 100vh;
+}
+.con img{
+  display: block;
+  width: 50%;
+  margin:50px auto;
+}
+.log-btn{
+  line-height: 25px;
+  margin-top: 20px;
+  font-size: 16px;
+  width: 80%;
+  border-radius: 20px;
+  color: #000;
+  background-color: #fff;
+  /*opacity: 0.5;*/
+  border:0;
+}
+label{
+  width: 28%;
+  display: inline-block;
+  text-align: right;
+  color: #fff;
+}
+input{
+  width: 65%;
+}
 </style>

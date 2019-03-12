@@ -37,22 +37,34 @@ export default new Router({
     {
       path: '/home',
       name: 'home',
-      component: HelloWorld
+      component: HelloWorld,
+      meta:{
+        showFoot:true
+      }
     },
     {
       path: '/vip',
       name: 'vip',
-      component: Vip
+      component: Vip,
+      meta:{
+        showFoot:true
+      }
     },
     {
       path: '/search',
       name: 'search',
-      component: Search
+      component: Search,
+      meta:{
+        showFoot:true
+      }
     },
     {
       path: '/car',
       name: 'car',
-      component: Car
+      component: Car,
+      meta:{
+        showFoot:true
+      }
     },
     {
       path: '/news',

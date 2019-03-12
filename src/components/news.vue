@@ -46,7 +46,7 @@ export default {
 <style lang="css" scoped>
 
 .mui-table-view-cell:last-child{
-  padding-bottom: 50px;
+  margin-bottom: 50px;
 }
 .mui-table-view li{
 	height: 50px;

@@ -1,10 +1,14 @@
 <template>
 	<div>
-		<label>用户名：</label><input type="text" name="" v-model="user">
-		<label>密码：</label><input type="password" name="" v-model="pwd">
-    <mt-button @click=$router.go(-1)>返回</mt-button>
-		<mt-button @click="login">登录</mt-button>
-		<span @click="forget" class="forget">忘记密码</span>
+    <Second :title='title'>{{title}}</Second>
+    <div class="con">
+      <img src="../../static/img/logo.png" alt="" width="50%">
+      <label>用户名：</label><input type="text" name="" v-model="user">
+      <label>密码：</label><input type="password" name="" v-model="pwd">
+     <!--  <button class="mui-btn mui-btn-primary" @click=$router.go(-1)>返回</button> -->
+      <button class="log-btn" @click="login">登&emsp;&emsp;录</button>
+      <span @click="forget" class="forget">忘记密码</span>
+    </div>
 	</div>
 </template>
 
@@ -15,6 +19,7 @@ export default {
 
   data () {
     return {
+      title:'用户登录',
     	user:'',
     	pwd:'',
     	sql:[],
@@ -70,12 +75,44 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.con{
+  padding-top: 80px;
+  background: linear-gradient(#999, #000); /* 标准的语法 */
+  opacity: 0.8;
+  height: 100vh;
+}
+.con img{
+  display: block;
+  width: 50%;
+  margin:50px auto;
+}
+.log-btn{
+  line-height: 25px;
+  margin-top: 20px;
+  font-size: 16px;
+  width: 80%;
+  border-radius: 20px;
+  color: #000;
+  background-color: #fff;
+  /*opacity: 0.5;*/
+  border:0;
+}
 .forget{
-	color: #55a;
+	color: #aaa;
 	display: block;
+  margin-top: 15px;
 	margin-right: 20px;
 	font-size: 14px;
 	text-align: right;
 	text-decoration: underline;
+}
+label{
+  width: 22%;
+  display: inline-block;
+  text-align: left;
+  color: #fff;
+}
+input{
+  width: 65%;
 }
 </style>

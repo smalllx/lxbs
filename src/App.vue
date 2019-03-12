@@ -2,7 +2,7 @@
   <div id="app">
     <router-view v-on:addc="getcarValue"/>
     <!-- <Foot :carNum="carNum"></Foot> -->
-    <Foot></Foot>
+    <Foot v-show="$route.meta.showFoot"></Foot>
   </div>
 </template>
 
