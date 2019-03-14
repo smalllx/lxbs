@@ -1,7 +1,15 @@
 <template>
 	<div>
     <Second :title='title'>{{title}}</Second>
-  		<ul class="mui-table-view second-c">
+      <div class="address" v-if="carList.length>0">
+        <div class="addinfo">
+          <p><span>收件人：</span><span>{{address.name}}</span></p>
+          <p><span>联系电话：</span><span>{{address.tel}}</span></p>
+          <p><span>收件地址：</span><span>{{address.add}}</span></p>
+        </div>
+        <div class="toggle"><button @click="changeAdd()">选择</button></div>
+      </div>
+  		<ul class="mui-table-view">
 		    <li class="mui-table-view-cell " v-for="(item,index) in carList" :key="index">
 		        <!-- <router-link :to="{name:'shoppingDetail',query:{id:item.id}}" > -->
             
@@ -35,7 +43,8 @@ export default {
     return {
     	title:'购物车',
     	carList:[],
-      baseurl:'http://localhost:3000'
+      baseurl:'http://localhost:3000',
+      address:{}
     }
   },
   methods:{
@@ -143,6 +152,9 @@ export default {
         .catch(err=>{
           console.log(err)
         })
+    },
+    changeAdd(){
+      this.$router.push({name:'addr'})
     }
   },
   created(){
@@ -159,6 +171,21 @@ export default {
             })
           }
           this.carList = goodsList;
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+      //根据用户名获取选中的收货地址
+      this.$axios.post(this.baseurl+'/getadd',{user:this.$store.state.user})  
+        .then(res=>{
+          console.log(res.data)
+          var data = res.data.varList;
+          data.forEach( item => {
+            if(item.select){
+              this.address = item;
+              return;
+            }
+          })
         })
         .catch(err=>{
           console.log(err)
@@ -181,6 +208,27 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.address{
+  text-align: left;
+  display: flex;
+  margin-top:40px;
+  padding: 5px 10px;
+  background: #e8e5e5;
+}
+.address .addinfo{
+  flex: 5;
+}
+.address .addinfo p span:first-child{
+  color:#000;
+  display: inline-block;
+  width:75px;
+}
+.address .toggle{
+  flex:1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .desc{
 	overflow: hidden;
   text-align: left;
@@ -234,7 +282,6 @@ export default {
 	font-size: 14px;
 }
 .mui-table-view{
-  padding: 42px 0 0;
   margin-bottom:110px;
 }
 .mui-media-object.mui-pull-left.goods{

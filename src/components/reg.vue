@@ -73,7 +73,7 @@ export default {
 <style lang="css" scoped>
 .con{
   padding-top: 80px;
-  background: linear-gradient(#999, #000); /* 标准的语法 */
+  background: linear-gradient(#ccc, #1d9716); /* 标准的语法 */
   opacity: 0.8;
   height: 100vh;
 }

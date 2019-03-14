@@ -47,5 +47,7 @@ export default {
 </script>
 
 <style lang="css" scoped>
-
+.mui-bar-tab .mui-tab-item.mui-active {
+    color: #1d9716;
+}
 </style>

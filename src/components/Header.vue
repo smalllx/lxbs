@@ -63,6 +63,9 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.mint-header {
+  background-color: #1d9716;
+}
   .grid{
     background-color: #fff;
   }
