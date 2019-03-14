@@ -138,12 +138,12 @@ export default {
         }
       })
       console.log(buygoods)
-      this.$axios.post(this.baseurl+'/buygoods',{user:this.$store.state.user,buy:buygoods,nums:buynum})  
+      this.$axios.post(this.baseurl+'/buygoods',{user:this.$store.state.user,buy:buygoods,nums:buynum})
         .then(res=>{
           console.log(res.data)
           if(res.data.msg == "ok"){
             this.$toast({  
-                message: '购买成功，你的包裹正向您飞来~', //提示内容分
+                message: '购买成功，订单处理中', //提示内容分
                   position: 'center', //提示框位置
                   duration: 2000  //持续时间（毫秒），若为 -1 则不会自动关闭
             }); 
@@ -152,6 +152,18 @@ export default {
         .catch(err=>{
           console.log(err)
         })
+        //生成订单列表
+        if(this.address){
+          var orderid = new Date().getTime();
+          this.$axios.post(this.baseurl+'/order',{user:this.$store.state.user,buy:buygoods,nums:buynum,address:this.address,orderid:orderid})
+        .then(res=>{
+          console.log(res.data)
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+        }
+      
     },
     changeAdd(){
       this.$router.push({name:'addr'})
