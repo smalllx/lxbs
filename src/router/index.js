@@ -29,6 +29,7 @@ import login from '@/components/login'
 import reg from '@/components/reg'
 import Addr from '@/components/addr'
 import newadd from '@/components/newadd'
+import buygoods from '@/components/buygoods'
 // Vue.prototype.$mui = mui
 // Vue.prototype.$citydata = citydata
 // Vue.prototype.$citypick = citypick
@@ -125,6 +126,11 @@ export default new Router({
       name:'newadd',
       path:'/newadd',
       component:newadd
+    },
+    {
+      name:'buygoods',
+      path:'/buygoods',
+      component:buygoods
     }
   ]
 })

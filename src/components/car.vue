@@ -128,9 +128,13 @@ export default {
     },
     buy(){
       var buygoods = [];
+      var goodsname = [];
       var buynum = [];
+      var imgs = []
       this.carList.forEach((item,index) =>{
         if (item.isPicked) {
+          goodsname.push(item.introduct)
+          imgs.push(item.url)
           buygoods.push(item.goodsid)
           buynum.push(item.num)
           this.$store.state.carNum -= item.num;
@@ -155,13 +159,13 @@ export default {
         //生成订单列表
         if(this.address){
           var orderid = new Date().getTime();
-          this.$axios.post(this.baseurl+'/order',{user:this.$store.state.user,buy:buygoods,nums:buynum,address:this.address,orderid:orderid})
-        .then(res=>{
-          console.log(res.data)
-        })
-        .catch(err=>{
-          console.log(err)
-        })
+          this.$axios.post(this.baseurl+'/order',{user:this.$store.state.user,buy:buygoods,nums:buynum,address:this.address,orderid:orderid,goodsname:goodsname,imgs:imgs})
+          .then(res=>{
+            console.log(res.data)
+          })
+          .catch(err=>{
+            console.log(err)
+          })
         }
       
     },

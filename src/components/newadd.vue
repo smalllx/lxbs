@@ -12,11 +12,11 @@
 		    </div>
 		    <div class="mui-input-row" style="height:auto">
 		        <label>收货地址：</label>
-		    	<input type="text" placeholder="请选择地址(省、市、区)" v-model="pca"/></input>
+		    	<input type="text" placeholder="区域（中区、南区、北区、仙游校区）" v-model="area"/></input>
 		    </div>
 		    <div class="mui-input-row" style="height:80px">
 		        <label>详细地址：</label>
-		    	<textarea style="text-align:left;height:60px" type="text" id="detailAddr" class="mui-input-clear" placeholder="请输入详细地址，如街道、门牌号等" v-model="add"></textarea>
+		    	<textarea style="text-align:left;height:60px" type="text" id="detailAddr" class="mui-input-clear" placeholder="请输入详细地址，如楼栋号、宿舍号等" v-model="add"></textarea>
 		    </div>
 		    <button class="addadd" @click="newAdd()">确认添加</button>
 		</div>
@@ -34,15 +34,15 @@ export default {
     	baseurl:'http://localhost:3000',
     	name:'',
     	tel:'',
-    	pca:'',//省市区
+    	area:'',//省市区
     	add:''
     }
   },
   methods:{
   	newAdd(){
-  		console.log(this.name,this.tel,this.add,this.pca)
-  		if(this.name != "" && this.tel != "" && this.add != "" && this.pca != ""){
-  			this.$axios.post(this.baseurl+'/newadd',{user:this.$store.state.user,name:this.name,tel:this.tel,add:this.pca+this.add})
+  		console.log(this.name,this.tel,this.add,this.area)
+  		if(this.name != "" && this.tel != "" && this.add != "" && this.area != ""){
+  			this.$axios.post(this.baseurl+'/newadd',{user:this.$store.state.user,name:this.name,tel:this.tel,add:this.area+this.add})
 	        .then(res=>{
 	          console.log(res.data)
 	          if(res.data.msg == "ok"){
