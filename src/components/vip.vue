@@ -14,10 +14,12 @@
 		            <img class="mui-media-object mui-pull-left img" :src="item.img" onerror="this.src='../static/img/ptshop_default.jpg'">
 		            <div class="mui-media-body">
 		                <p class="goodsdesc">{{item.goodsname}}</p> 
-		                <p class='mui-ellipsis num'>
+		                <p class='num mui-ellipsis'>
+		                  <span v-if="item.send">运输中</span>
+		                  <span v-else>待发货</span>
 		                  	x{{item.num}}
 				        </p>
-				        <button class="done" @click="orderdone(item.orderid,item.goodsid,index)">确认送达</button>
+				        <button class="done" v-show="item.send" @click="orderdone(item.orderid,item.goodsid,index)">确认送达</button>
 		            </div>
 			    </li>
 			</ul>
@@ -148,8 +150,12 @@ export default {
 	line-height: 45px;
 }
 .mui-ellipsis.num {
-	text-indent: 4em;
+	/*text-indent: 4em;*/
 	text-align: left;
+}
+.num span{
+	color: red;
+	margin-right: 20px;
 }
 .done{
 	position: absolute;
@@ -158,5 +164,4 @@ export default {
 	background-color: #1d9716;
 	color: #fff;
 }
-/**/
 </style>
