@@ -20,7 +20,7 @@ export default {
   name: 'shopping',
   data () {
     return {
-    	title:"Lx商城",
+    	title:"pt商城",
     	list:{},
     	baseurl:'http://localhost:3000'
     }

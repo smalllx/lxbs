@@ -16,7 +16,7 @@
                         <div class="mui-media-body">房屋出租</div></router-link></li>
                 <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><router-link to="/shopping">
                         <span class="mui-icon mui-icon-home"></span>
-                        <div class="mui-media-body">Lx商城</div></router-link></li>
+                        <div class="mui-media-body">pt商城</div></router-link></li>
                 <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="#">
                         <span class="mui-icon mui-icon-location"></span>
                         <div class="mui-media-body">待</div></a></li>
